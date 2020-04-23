@@ -1,0 +1,16 @@
+{
+  "name": "finances",
+  "version": "1.0.0",
+  "description": "my personal accountant",
+  "main": "src/app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.ts"
+  },
+  "author": "Oleh_Vls",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^13.13.2",
+    "express": "^4.17.1"
+  }
+}
