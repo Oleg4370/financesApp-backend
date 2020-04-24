@@ -1,20 +1,22 @@
 import express from 'express';
-import OperationsService from 'src/services/operations.service';
-const router = express.Router();
+import getOperationsService from '@src/services/operations.service';
 
-router.get('/', function (req, res) {
+const router = express.Router();
+const OperationsService = getOperationsService();
+
+router.get('/', (req, res) => {
     OperationsService.getData()
-        .then(() => {
+        .then((data )=> {
             res
                 .header("Content-Type",'application/json')
-                .send('all operations here');
+                .send(data);
         })
         .catch((error: any) => {
             res.status(500).send(error);
         });
 });
 
-router.post('/', function (req, res) {
+router.post('/', (req, res) => {
     OperationsService.addData(req.body)
       .then((savedData: any) => {
           res.status(200).send(savedData);

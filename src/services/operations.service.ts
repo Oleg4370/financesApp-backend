@@ -1,12 +1,26 @@
-import dbConnect from 'src/dbConnect';
-import { Operation } from 'src/models/baseModels';
+import { Operation, DbConnect } from '@src/models/baseModels';
+import dbConnect from '@src/dbConnect';
+import { BaseOperationsService } from './baseServices';
 
-export default class OperationsService {
+class OperationsService extends BaseOperationsService{
+    constructor(db: DbConnect) {
+        super();
+        this.db = db;
+    }
+
     public async getData(): Promise<Operation[] | Error> {
         try {
-            const data = await dbConnect.getData;
+            return await this.db.getData();
+        } catch(err) {
+            return new Error(err);
+        }
+    }
 
-            return JSON.parse(data);
+    public async getDataById(id: string): Promise<Operation | Error> {
+        try {
+            const data = await this.db.getData();
+
+            return data.find(item => item.id === id);
         } catch(err) {
             return new Error(err);
         }
@@ -14,10 +28,10 @@ export default class OperationsService {
 
     public async addData(newOperation: Operation): Promise<Operation | Error> {
         try {
-            const data = await dbConnect.getData;
-            const formattedData = JSON.parse(data);
-            formattedData.push(newOperation);
-            await dbConnect.setData(formattedData);
+            const data = await this.db.getData();
+
+            data.push(newOperation);
+            await this.db.setData(data);
 
             return newOperation;
         } catch(err) {
@@ -25,3 +39,5 @@ export default class OperationsService {
         }
     }
 }
+
+export default (): BaseOperationsService => new OperationsService(dbConnect);
