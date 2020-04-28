@@ -1,7 +1,7 @@
-import express from 'express';
-import getOperationsService from '@src/services/operations.service';
+import { Router } from 'express';
+import getOperationsService from './services/operation.service';
 
-const router = express.Router();
+const router = Router();
 const OperationsService = getOperationsService();
 
 router.get('/', (req, res) => {

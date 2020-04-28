@@ -1,5 +1,5 @@
-import { Operation, DbConnect } from '@src/models/baseModels';
-import dbConnect from '@src/dbConnect';
+import { Operation, DbConnect } from '../models/baseModels';
+import dbConnect from '@src/database/database.service';
 import { BaseOperationsService } from './baseServices';
 
 class OperationsService extends BaseOperationsService{

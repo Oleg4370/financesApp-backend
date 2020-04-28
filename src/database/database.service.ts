@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Operation } from './models/baseModels';
+import { Operation } from "@src/operation/operation.models";
 import { pathToDBFile } from '@src/config';
 
 const getData = (): Promise<Operation[]> => {

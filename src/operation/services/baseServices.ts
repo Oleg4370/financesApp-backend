@@ -1,4 +1,5 @@
-import { Operation, OperationJson, DbConnect } from '@src/models/baseModels';
+import { DbConnect } from '@src/database/database.models';
+import { Operation } from '@src/operation/operation.models';
 
 export abstract class BaseOperationsService {
     db: DbConnect;
