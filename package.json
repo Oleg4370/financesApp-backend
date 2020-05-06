@@ -16,10 +16,12 @@
     "@types/morgan": "^1.9.0",
     "@types/node": "^13.13.2",
     "express": "^4.17.1",
+    "lodash": "^4.17.15",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.6",
+    "@types/lodash": "^4.14.150",
     "awesome-typescript-loader": "^5.2.1",
     "source-map-loader": "^0.2.4",
     "tslint": "^6.1.1",
