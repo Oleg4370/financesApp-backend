@@ -20,7 +20,7 @@ class OperationsService extends BaseOperationsService {
     try {
       const data = await this.db.findData('operations', { id });
 
-      return data.find((item: Operation) => item.id === id);
+      return data;
     } catch (err) {
       return new Error(err);
     }
@@ -30,10 +30,7 @@ class OperationsService extends BaseOperationsService {
     try {
       const data = await this.db.addData('operations', newOperation);
 
-      data.push(newOperation);
-      await this.db.setData(data);
-
-      return newOperation;
+      return data;
     } catch (err) {
       return new Error(err);
     }

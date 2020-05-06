@@ -5,11 +5,11 @@ export abstract class BaseDatabaseService {
     return new Promise(() => []);
   }
 
-  public addData(selector: string, data: {}): Promise<{} | Error> {
+  public addData(selector: string, data: {}): Promise<any> {
     return new Promise(() => ({}));
   }
 
-  public findData(selector: string, query: object): Promise<{} | Error> {
+  public findData(selector: string, query: object): Promise<any> {
     return new Promise(() => ({}));
   }
 }

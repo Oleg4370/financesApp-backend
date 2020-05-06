@@ -1,4 +1,4 @@
-import {DbConnect} from '@src/database/database.models';
+import { BaseDatabaseService } from '@src/database/services/base.services';
 import {Operation} from '@src/operation/operation.models';
 
 export abstract class BaseOperationsService {

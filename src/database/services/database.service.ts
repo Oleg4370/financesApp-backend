@@ -19,7 +19,7 @@ class DatabaseService extends BaseDatabaseService {
     }
   }
 
-  async addData(selector: string, data: {}): Promise<{} | Error> {
+  async addData(selector: string, data: {}): Promise<object | Error> {
     try {
       await this.db[selector].push(data);
       return data;
@@ -28,7 +28,7 @@ class DatabaseService extends BaseDatabaseService {
     }
   }
 
-  async findData(selector: string, query: any): Promise<{} | Error> {
+  async findData(selector: string, query: any): Promise<object | Error> {
     try {
       const neededArray = await this.getData(selector);
       return find(neededArray, query) || {};

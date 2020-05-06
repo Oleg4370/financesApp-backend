@@ -11,7 +11,7 @@ app.use(morgan('tiny'));
 app.get('/', (req, res) => res.send('Hello World!'));
 
 app.use(express.json());
-app.use('/operation', operationRouter(dbConnect));
+app.use('/api/operation', operationRouter(dbConnect));
 
 app.listen(serverPort, () => {
   // tslint:disable-next-line:no-console
