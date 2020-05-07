@@ -28,7 +28,7 @@ class DatabaseService extends BaseDatabaseService {
     }
   }
 
-  async findData(selector: string, query: any): Promise<object | Error> {
+  async findData(selector: string, query: any): Promise<object | undefined | Error> {
     try {
       const neededArray = await this.getData(selector);
       return find(neededArray, query) || {};
