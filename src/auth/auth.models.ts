@@ -1,5 +1,4 @@
-export interface User {
-  login: string;
-  hash: string;
-  id?: string;
+export interface Token {
+  accessToken: string;
+  refreshToken: string;
 }

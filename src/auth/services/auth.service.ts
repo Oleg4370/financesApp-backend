@@ -1,6 +1,10 @@
-import { User } from '../auth.models';
+import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid';
+import jwt from 'jsonwebtoken';
+import { Token } from '../auth.models';
 import { BaseAuthService } from './base.services';
 import { BaseDatabaseService } from '@src/database/services/base.services';
+import { secretKey, tokenConfig } from "@src/config";
 
 class AuthService extends BaseAuthService {
   constructor(db: BaseDatabaseService) {
@@ -8,21 +12,25 @@ class AuthService extends BaseAuthService {
     this.db = db;
   }
 
-  public async getUser(login: string): Promise<User | undefined | Error> {
-    try {
-      return await this.db.findData('users', { login });
-    } catch (err) {
-      return new Error(err);
+  async generateToken(userData: object): Promise<Token> {
+    const refreshToken = uuidv4();
+
+    await this.db.addData('refreshTokens', { refreshToken, userData });
+    return {
+      accessToken: jwt.sign(userData, secretKey, tokenConfig),
+      refreshToken
     }
   }
 
-  public async addNewUser(newUser: User): Promise<any> {
-    try {
-      const data = await this.db.addData('users', newUser);
+  async refreshToken(refreshToken: string): Promise<Token> {
+    const refreshTokenData = await this.db.findData('refreshTokens', { refreshToken });
+    if (!refreshTokenData) {
+      throw new Error('Token not exist');
+    }
 
-      return data;
-    } catch (err) {
-      return new Error(err);
+    return {
+      accessToken: jwt.sign(refreshTokenData.userData, secretKey, tokenConfig),
+      refreshToken: uuidv4()
     }
   }
 }

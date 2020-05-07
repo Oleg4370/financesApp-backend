@@ -10,7 +10,7 @@ class DatabaseService extends BaseDatabaseService {
     this.db = dbConnector();
   }
 
-  async getData(selector: string): Promise<[] | Error> {
+  async getData(selector: string): Promise<[]> {
     try {
       const neededArray = await this.db[selector];
       return neededArray;

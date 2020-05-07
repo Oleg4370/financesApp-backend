@@ -1,14 +1,18 @@
 import { BaseDatabaseService } from '@src/database/services/base.services';
-import { User } from '../auth.models';
+import { Token } from '../auth.models';
 
 export abstract class BaseAuthService {
   db: BaseDatabaseService;
 
-  public getUser(query: any): Promise<User | undefined | Error> {
+  public generateToken(query: any): Promise<Token> {
     return new Promise(() => ({}));
   }
 
-  public addNewUser(user: User): Promise<any> {
+  public addRefreshToken(token: string): Promise<string> {
+    return new Promise(() => ({}));
+  }
+
+  public refreshToken(token: string): Promise<Token> {
     return new Promise(() => ({}));
   }
 }

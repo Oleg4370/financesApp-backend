@@ -9,7 +9,7 @@ export abstract class BaseDatabaseService {
     return new Promise(() => ({}));
   }
 
-  public findData(selector: string, query: object): Promise<any> {
+  public findData(selector: string, query: object | string): Promise<any> {
     return new Promise(() => ({}));
   }
 }

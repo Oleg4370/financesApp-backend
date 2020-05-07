@@ -9,5 +9,6 @@ export default {
   users: [
     {login: 'testUser', hash: bcrypt.hashSync('12345', 10)},
     {login: 'testAdmin', hash: bcrypt.hashSync('123456789', 10)}
-  ]
+  ],
+  refreshTokens: []
 }
