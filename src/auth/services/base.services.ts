@@ -8,7 +8,7 @@ export abstract class BaseAuthService {
     return new Promise(() => ({}));
   }
 
-  public addRefreshToken(token: string): Promise<string> {
+  public removeRefreshToken(query: object): Promise<object> {
     return new Promise(() => ({}));
   }
 

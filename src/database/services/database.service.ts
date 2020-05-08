@@ -1,4 +1,4 @@
-import find from 'lodash/find';
+import {find, reject} from 'lodash';
 import BaseDatabaseService from './base.services';
 import database from '../database';
 
@@ -32,6 +32,18 @@ class DatabaseService extends BaseDatabaseService {
     try {
       const neededArray = await this.getData(selector);
       return find(neededArray, query) || {};
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  async removeData(selector: string, query: object): Promise<object> {
+    try {
+      const neededArray = await this.getData(selector);
+      const updatedData = reject(neededArray, query);
+
+      this.db[selector] = updatedData;
+      return query;
     } catch (e) {
       throw new Error(e);
     }

@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
+import jwt from 'express-jwt';
 import getUserService from '@src/user/user.service';
 import getAuthService from '@src/auth/services/auth.service';
 import { secretKey } from '@src/config';
 import BaseDatabaseService from "@src/database/services/base.services";
-import { User } from "@src/user/user.models";
 
 const authRouter = (dbConnect: BaseDatabaseService) => {
   const router = Router();
@@ -45,6 +45,17 @@ const authRouter = (dbConnect: BaseDatabaseService) => {
         .send(token);
     } catch (e) {
       res.status(403).send(e);
+    }
+  });
+
+  router.post('/logout', jwt({ secret: secretKey }), async (req, res) => {
+    try {
+      // @ts-ignore
+      const { login } = req.user;
+      await AuthService.removeRefreshToken({login})
+      res.status(200).send('Successful logout');
+    } catch (e) {
+      res.status(500).send('Something went wrong');
     }
   });
 

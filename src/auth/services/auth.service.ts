@@ -15,11 +15,16 @@ class AuthService extends BaseAuthService {
   async generateToken(userData: object): Promise<Token> {
     const refreshToken = uuidv4();
 
-    await this.db.addData('refreshTokens', { refreshToken, userData });
+    await this.db.addData('refreshTokens', { refreshToken, ...userData });
     return {
       accessToken: jwt.sign(userData, secretKey, tokenConfig),
       refreshToken
     }
+  }
+
+  async removeRefreshToken(query: object): Promise<object> {
+    const removedObject = await this.db.removeData('refreshTokens', query);
+    return removedObject.refreshToken;
   }
 
   async refreshToken(refreshToken: string): Promise<Token> {
@@ -27,11 +32,9 @@ class AuthService extends BaseAuthService {
     if (!refreshTokenData) {
       throw new Error('Token not exist');
     }
+    await this.removeRefreshToken({refreshToken});
 
-    return {
-      accessToken: jwt.sign(refreshTokenData.userData, secretKey, tokenConfig),
-      refreshToken: uuidv4()
-    }
+    return this.generateToken(refreshTokenData.userData);
   }
 }
 
