@@ -1,12 +1,12 @@
 import {find, reject} from 'lodash';
-import BaseDatabaseService from './base.services';
-import database from '../database';
+import { DatabaseInterface } from '@src/database/database.models';
+import database from './database';
 
 const getDB = () => database;
 
-class DatabaseService extends BaseDatabaseService {
+class DatabaseService implements DatabaseInterface {
+  db: any;
   constructor(dbConnector: any) {
-    super();
     this.db = dbConnector();
   }
 

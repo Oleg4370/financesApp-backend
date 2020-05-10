@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import getOperationsService from './services/operation.service';
-import BaseDatabaseService from "@src/database/services/base.services";
+import getOperationsService from './operation.service';
+import { DatabaseInterface } from "@src/database/database.models";
 
-const operationRouter = (dbConnect: BaseDatabaseService) => {
+const operationRouter = (dbConnect: DatabaseInterface) => {
   const router = Router();
   const OperationsService = getOperationsService(dbConnect);
 

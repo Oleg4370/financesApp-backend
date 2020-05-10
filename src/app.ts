@@ -4,7 +4,7 @@ import jwt from 'express-jwt';
 import { serverPort, secretKey } from '@src/config';
 import operationRouter from '@src/operation/operation.routes';
 import authRouter from '@src/auth/auth.routes';
-import getDatabaseService from '@src/database/services/database.service';
+import getDatabaseService from '@src/database/database.service';
 
 const app = express();
 const dbConnect = getDatabaseService();

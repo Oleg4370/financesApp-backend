@@ -1,10 +1,10 @@
 import { User } from './user.models';
-import { BaseDatabaseService } from '@src/database/services/base.services';
+import { DatabaseInterface } from '@src/database/database.models';
 
 class UserService {
-  db: BaseDatabaseService;
+  db: DatabaseInterface;
 
-  constructor(db: BaseDatabaseService) {
+  constructor(db: DatabaseInterface) {
     this.db = db;
   }
 
@@ -23,4 +23,4 @@ class UserService {
   }
 }
 
-export default (dbConnect: BaseDatabaseService) => new UserService(dbConnect);
+export default (dbConnect: DatabaseInterface) => new UserService(dbConnect);

@@ -2,11 +2,11 @@ import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'express-jwt';
 import getUserService from '@src/user/user.service';
-import getAuthService from '@src/auth/services/auth.service';
+import getAuthService from '@src/auth/auth.service';
 import { secretKey } from '@src/config';
-import BaseDatabaseService from "@src/database/services/base.services";
+import { DatabaseInterface } from "@src/database/database.models";
 
-const authRouter = (dbConnect: BaseDatabaseService) => {
+const authRouter = (dbConnect: DatabaseInterface) => {
   const router = Router();
   const UserService = getUserService(dbConnect);
   const AuthService = getAuthService(dbConnect);

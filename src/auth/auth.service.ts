@@ -1,16 +1,12 @@
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
-import { Token } from '../auth.models';
-import { BaseAuthService } from './base.services';
-import { BaseDatabaseService } from '@src/database/services/base.services';
+import { Token, AuthInterface } from './auth.models';
+import { DatabaseInterface } from '@src/database/database.models';
 import { secretKey, tokenConfig } from "@src/config";
 
-class AuthService extends BaseAuthService {
-  constructor(db: BaseDatabaseService) {
-    super();
-    this.db = db;
-  }
+class AuthService implements AuthInterface {
+  constructor(private db: DatabaseInterface) {}
 
   async generateToken(userData: object): Promise<Token> {
     const refreshToken = uuidv4();
@@ -22,7 +18,7 @@ class AuthService extends BaseAuthService {
     }
   }
 
-  async removeRefreshToken(query: object): Promise<object> {
+  async removeRefreshToken(query: object): Promise<string> {
     const removedObject = await this.db.removeData('refreshTokens', query);
     return removedObject.refreshToken;
   }
@@ -38,4 +34,4 @@ class AuthService extends BaseAuthService {
   }
 }
 
-export default (dbConnect: BaseDatabaseService): BaseAuthService => new AuthService(dbConnect);
+export default (dbConnect: DatabaseInterface): AuthInterface => new AuthService(dbConnect);
