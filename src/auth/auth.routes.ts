@@ -1,10 +1,17 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'express-jwt';
+import status from 'http-status';
 import getUserService from '@src/user/user.service';
 import getAuthService from '@src/auth/auth.service';
 import { secretKey } from '@src/config';
 import { DatabaseInterface } from "@src/database/database.models";
+import ResponseSender from '@src/utils/responseSender';
+
+const authResMessages = {
+  invalidUser: 'Send incorrect user object',
+  logout: 'Successful logout'
+}
 
 const authRouter = (dbConnect: DatabaseInterface) => {
   const router = Router();
@@ -14,7 +21,7 @@ const authRouter = (dbConnect: DatabaseInterface) => {
   router.post('/login', async (req, res) => {
     const userData = req.body;
     if (!userData?.login || !userData?.password) {
-      res.status(500).send('Send incorrect user object');
+      ResponseSender.sendError(res, authResMessages.invalidUser);
       return;
     }
     try {
@@ -23,15 +30,14 @@ const authRouter = (dbConnect: DatabaseInterface) => {
 
       bcrypt.compare(userData.password, hash, (err, result) => {
         if (result) {
-          res
-            .header('Content-Type', 'application/json')
-            .send(token);
+          ResponseSender.sendSuccess(res, token);
         } else {
-          res.status(403).send(err);
+          res.status(status.FORBIDDEN).send(err);
+          ResponseSender.sendError(res, err);
         }
       });
-    } catch (e) {
-      res.status(500).send(e);
+    } catch (error) {
+      ResponseSender.sendError(res, error);
     }
   });
 
@@ -40,11 +46,9 @@ const authRouter = (dbConnect: DatabaseInterface) => {
 
     try {
       const token = await AuthService.refreshToken(refreshToken);
-      res
-        .header('Content-Type', 'application/json')
-        .send(token);
-    } catch (e) {
-      res.status(403).send(e);
+      ResponseSender.sendSuccess(res, token);
+    } catch (error) {
+      ResponseSender.sendError(res, error, { statusCode: 403 });
     }
   });
 
@@ -53,9 +57,9 @@ const authRouter = (dbConnect: DatabaseInterface) => {
       // @ts-ignore
       const { login } = req.user;
       await AuthService.removeRefreshToken({login})
-      res.status(200).send('Successful logout');
+      ResponseSender.sendSuccess(res, authResMessages.logout);
     } catch (e) {
-      res.status(500).send('Something went wrong');
+      ResponseSender.sendError(res);
     }
   });
 

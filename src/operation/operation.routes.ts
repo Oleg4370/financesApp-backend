@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import getOperationsService from './operation.service';
-import { DatabaseInterface } from "@src/database/database.models";
+import { DatabaseInterface } from '@src/database/database.models';
+import ResponseSender from '@src/utils/responseSender';
 
 const operationRouter = (dbConnect: DatabaseInterface) => {
   const router = Router();
@@ -9,22 +10,20 @@ const operationRouter = (dbConnect: DatabaseInterface) => {
   router.get('/', (req, res) => {
     OperationsService.getData()
       .then((data) => {
-        res
-          .header("Content-Type", 'application/json')
-          .send(data);
+        ResponseSender.sendSuccess(res, data);
       })
       .catch((error: any) => {
-        res.status(500).send(error);
+        ResponseSender.sendError(res, error);
       });
   });
 
   router.post('/', (req, res) => {
     OperationsService.addData(req.body)
       .then((savedData: any) => {
-        res.status(200).send(savedData);
+        ResponseSender.sendSuccess(res, savedData);
       })
       .catch((error: any) => {
-        res.status(500).send(error);
+        ResponseSender.sendError(res, error);
       });
   });
 
