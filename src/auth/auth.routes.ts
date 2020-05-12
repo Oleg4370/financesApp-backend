@@ -4,6 +4,7 @@ import jwt from 'express-jwt';
 import status from 'http-status';
 import getUserService from '@src/user/user.service';
 import getAuthService from '@src/auth/auth.service';
+import { ExtendedRequest } from '@src/auth/auth.models';
 import { secretKey } from '@src/config';
 import { DatabaseInterface } from "@src/database/database.models";
 import ResponseSender from '@src/utils/responseSender';
@@ -52,11 +53,10 @@ const authRouter = (dbConnect: DatabaseInterface) => {
     }
   });
 
-  router.post('/logout', jwt({ secret: secretKey }), async (req, res) => {
+  router.post('/logout', jwt({ secret: secretKey }), async (req: ExtendedRequest, res) => {
     try {
-      // @ts-ignore
       const { login } = req.user;
-      await AuthService.removeRefreshToken({login})
+      await AuthService.removeRefreshToken({login});
       ResponseSender.sendSuccess(res, authResMessages.logout);
     } catch (e) {
       ResponseSender.sendError(res);

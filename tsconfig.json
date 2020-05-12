@@ -7,11 +7,13 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
+    "rootDir": "src",
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"],
       "*": ["node_modules/*"]
     },
+    "typeRoots": ["node_modules/@types"],
     "plugins": [
       {
         "transform": "typescript-transform-paths",
@@ -21,5 +23,6 @@
   },
   "include": [
     "src/**/*"
-  ]
+  ],
+  "exclude": ["node_modules", "dist"]
 }
