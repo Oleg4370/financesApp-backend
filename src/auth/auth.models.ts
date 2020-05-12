@@ -8,6 +8,7 @@ export interface Token {
 
 export interface AuthInterface {
   generateToken(user: User): Promise<Token>;
+  login(user: User): Promise<Token>;
   removeRefreshToken(query: object): Promise<string>;
   refreshToken(refreshToken: string): Promise<Token>;
 }
