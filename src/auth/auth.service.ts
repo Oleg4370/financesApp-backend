@@ -6,8 +6,6 @@ import getUserService from '@src/user/user.service';
 import { User } from '@src/user/user.models';
 import { DatabaseInterface } from '@src/database/database.models';
 import { secretKey, tokenConfig } from "@src/config";
-import ResponseSender from "@src/utils/responseSender";
-import status from "http-status";
 
 class AuthService implements AuthInterface {
   constructor(private db: DatabaseInterface) {}
@@ -44,7 +42,7 @@ class AuthService implements AuthInterface {
     }
     await this.removeRefreshToken({refreshToken});
 
-    return this.generateToken(refreshTokenData.userData);
+    return this.generateToken({ login: refreshTokenData.login });
   }
 }
 
