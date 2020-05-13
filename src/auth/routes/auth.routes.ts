@@ -4,7 +4,7 @@ import getAuthService from '@src/auth/auth.service';
 import { ExtendedRequest } from '@src/auth/auth.models';
 import { secretKey } from '@src/config';
 import { DatabaseInterface } from "@src/database/database.models";
-import ResponseSender from '@src/utils/responseSender';
+import { successResponse, errorResponse } from '@src/utils/responseBuilder';
 import validation from './auth.schemas';
 
 const authResMessages = {
@@ -21,9 +21,11 @@ const authRouter = (dbConnect: DatabaseInterface) => {
       const userData = await validation.userSchema.validateAsync(req.body);
       const token = await AuthService.login(userData);
 
-      ResponseSender.sendSuccess(res, token);
+      const {headers, status, body} = successResponse(token);
+      res.set(headers).status(status).send(body);
     } catch (error) {
-      ResponseSender.sendError(res, error);
+      const {headers, status, body} = errorResponse(error);
+      res.set(headers).status(status).send(body);
     }
   });
 
@@ -31,9 +33,12 @@ const authRouter = (dbConnect: DatabaseInterface) => {
     try {
       const { refreshToken } = await validation.tokenSchema.validateAsync(req.body);
       const token = await AuthService.refreshToken(refreshToken);
-      ResponseSender.sendSuccess(res, token);
+
+      const {headers, status, body} = successResponse(token);
+      res.set(headers).status(status).send(body);
     } catch (error) {
-      ResponseSender.sendError(res, error, { statusCode: 403 });
+      const {headers, status, body} = errorResponse(error);
+      res.set(headers).status(status).send(body);
     }
   });
 
@@ -41,9 +46,12 @@ const authRouter = (dbConnect: DatabaseInterface) => {
     try {
       const { login } = await validation.jwtSchema.validateAsync(req.user);
       await AuthService.removeRefreshToken({login});
-      ResponseSender.sendSuccess(res, authResMessages.logout);
+
+      const {headers, status, body} = successResponse(authResMessages.logout);
+      res.set(headers).status(status).send(body);
     } catch (error) {
-      ResponseSender.sendError(res, error);
+      const {headers, status, body} = errorResponse(error);
+      res.set(headers).status(status).send(body);
     }
   });
 
