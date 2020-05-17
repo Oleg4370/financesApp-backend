@@ -13,7 +13,7 @@ export interface AuthInterface {
   refreshToken(refreshToken: string): Promise<Token>;
 }
 
-export interface ExtendedRequest extends Request {
+export interface AuthRequest extends Request {
   user: {
     login: string;
   }

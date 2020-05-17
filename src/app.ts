@@ -1,8 +1,9 @@
 import express from 'express';
 import morgan from 'morgan';
 import jwt from 'express-jwt';
+import helmet from 'helmet';
 import { serverPort, secretKey } from '@src/config';
-import operationRouter from '@src/operation/operation.routes';
+import operationRouter from '@src/operation/routes/operation.routes';
 import authRouter from '@src/auth/routes/auth.routes';
 import getDatabaseService from '@src/database/database.service';
 
@@ -10,6 +11,7 @@ const app = express();
 const dbConnect = getDatabaseService();
 
 app.use(morgan('tiny'));
+app.use(helmet());
 app.get('/', (req, res) => res.send('Hello World!'));
 
 app.use(express.json());

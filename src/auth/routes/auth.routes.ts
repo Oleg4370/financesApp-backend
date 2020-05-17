@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import jwt from 'express-jwt';
 import getAuthService from '@src/auth/auth.service';
-import { ExtendedRequest } from '@src/auth/auth.models';
+import { AuthRequest } from '@src/auth/auth.models';
 import { secretKey } from '@src/config';
 import { DatabaseInterface } from "@src/database/database.models";
-import { successResponse, errorResponse } from '@src/utils/responseBuilder';
+import { getErrorResponse, successResponse } from '@src/utils/responseBuilder';
 import validation from './auth.schemas';
 
 const authResMessages = {
@@ -24,7 +24,7 @@ const authRouter = (dbConnect: DatabaseInterface) => {
       const {headers, status, body} = successResponse(token);
       res.set(headers).status(status).send(body);
     } catch (error) {
-      const {headers, status, body} = errorResponse(error);
+      const {headers, status, body} = getErrorResponse(error);
       res.set(headers).status(status).send(body);
     }
   });
@@ -37,12 +37,12 @@ const authRouter = (dbConnect: DatabaseInterface) => {
       const {headers, status, body} = successResponse(token);
       res.set(headers).status(status).send(body);
     } catch (error) {
-      const {headers, status, body} = errorResponse(error);
+      const {headers, status, body} = getErrorResponse(error);
       res.set(headers).status(status).send(body);
     }
   });
 
-  router.post('/logout', jwt({ secret: secretKey }), async (req: ExtendedRequest, res) => {
+  router.post('/logout', jwt({ secret: secretKey }), async (req: AuthRequest, res) => {
     try {
       const { login } = await validation.jwtSchema.validateAsync(req.user);
       await AuthService.removeRefreshToken({login});
@@ -50,7 +50,7 @@ const authRouter = (dbConnect: DatabaseInterface) => {
       const {headers, status, body} = successResponse(authResMessages.logout);
       res.set(headers).status(status).send(body);
     } catch (error) {
-      const {headers, status, body} = errorResponse(error);
+      const {headers, status, body} = getErrorResponse(error);
       res.set(headers).status(status).send(body);
     }
   });

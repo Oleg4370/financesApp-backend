@@ -25,10 +25,16 @@ class AuthService implements AuthInterface {
     const UserService = getUserService(this.db);
 
     const { login, hash } = await UserService.getUser(userData.login);
-    const token = await this.generateToken({ login });
+    if (!login) {
+      throw new Error(`User with login ${userData.login} not exist`);
+    }
+    const isPasswordCorrect = await bcrypt.compare(userData.password, hash);
 
-    await bcrypt.compare(userData.password, hash);
-    return token;
+    if (isPasswordCorrect) {
+      return await this.generateToken({ login });
+    } else {
+      throw new Error(`User password are incorrect`);
+    }
   }
 
   async removeRefreshToken(query: object): Promise<string> {
