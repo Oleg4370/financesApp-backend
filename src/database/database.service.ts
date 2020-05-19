@@ -1,7 +1,12 @@
 import {find, reject} from 'lodash';
-import { DatabaseInterface } from '@src/database/database.models';
 import database from './database';
 
+export interface DatabaseInterface {
+  findAll(selector: string): Promise<[]>;
+  add(selector: string, data: {}): Promise<any>;
+  find(selector: string, query: object): Promise<any>;
+  remove(selector: string, query: object): Promise<any>;
+}
 const getDB = () => database;
 
 class DatabaseService implements DatabaseInterface {

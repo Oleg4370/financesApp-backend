@@ -2,11 +2,17 @@ import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { isEmpty } from 'lodash';
-import { Token, AuthInterface } from './auth.models';
+import { Token } from './auth.models';
 import getUserService from '@src/user/user.service';
 import { User } from '@src/user/user.models';
-import { DatabaseInterface } from '@src/database/database.models';
-import { secretKey, tokenConfig } from "@src/config";
+import { DatabaseInterface } from '@src/database/database.service';
+
+interface AuthInterface {
+  generateToken(user: User): Promise<Token>;
+  login(user: User): Promise<Token>;
+  removeRefreshToken(query: object): Promise<string>;
+  refreshToken(refreshToken: string): Promise<Token>;
+}
 
 class AuthService implements AuthInterface {
   constructor(private db: DatabaseInterface) {}
@@ -16,7 +22,7 @@ class AuthService implements AuthInterface {
 
     await this.db.add('refreshTokens', { refreshToken, ...userData });
     return {
-      accessToken: jwt.sign(userData, secretKey, tokenConfig),
+      accessToken: jwt.sign(userData, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXP }),
       refreshToken
     }
   }

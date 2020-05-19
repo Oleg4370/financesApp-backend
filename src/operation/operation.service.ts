@@ -1,6 +1,11 @@
 import {Operation} from './operation.models';
-import { OperationInterface } from '@src/operation/operation.models';
-import { DatabaseInterface } from '@src/database/database.models';
+import { DatabaseInterface } from '@src/database/database.service';
+
+interface OperationInterface {
+  getData(): Promise<Operation[]>;
+  getDataById(selector: string, id: string): Promise<Operation>;
+  addData(newOperation: Operation): Promise<Operation>;
+}
 
 class OperationsService implements OperationInterface {
   constructor(private db: DatabaseInterface) {}

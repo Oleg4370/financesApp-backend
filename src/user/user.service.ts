@@ -1,5 +1,5 @@
 import { User } from './user.models';
-import { DatabaseInterface } from '@src/database/database.models';
+import { DatabaseInterface } from '@src/database/database.service';
 
 class UserService {
   constructor(private db: DatabaseInterface) {}

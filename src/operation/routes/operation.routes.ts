@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import getOperationsService from '../operation.service';
-import { DatabaseInterface } from '@src/database/database.models';
+import { DatabaseInterface } from '@src/database/database.service';
 import { successResponse, createdResponse, getErrorResponse, internalErrorResponse } from '@src/utils/responseBuilder';
 import { operationSchema } from './operation.schemas';
 

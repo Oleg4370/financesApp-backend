@@ -2,8 +2,7 @@ import { Router } from 'express';
 import jwt from 'express-jwt';
 import getAuthService from '@src/auth/auth.service';
 import { AuthRequest } from '@src/auth/auth.models';
-import { secretKey } from '@src/config';
-import { DatabaseInterface } from "@src/database/database.models";
+import { DatabaseInterface } from '@src/database/database.service';
 import { getErrorResponse, successResponse } from '@src/utils/responseBuilder';
 import validation from './auth.schemas';
 
@@ -42,7 +41,7 @@ const authRouter = (dbConnect: DatabaseInterface) => {
     }
   });
 
-  router.post('/logout', jwt({ secret: secretKey }), async (req: AuthRequest, res) => {
+  router.post('/logout', jwt({ secret: process.env.TOKEN_SECRET }), async (req: AuthRequest, res) => {
     try {
       const { login } = await validation.jwtSchema.validateAsync(req.user);
       await AuthService.removeRefreshToken({login});
