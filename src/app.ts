@@ -4,9 +4,9 @@ import jwt from 'express-jwt';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import pino from 'pino';
-import operationRouter from '@src/operation/routes/operation.routes';
-import authRouter from '@src/auth/routes/auth.routes';
-import getDatabaseService from '@src/database/database.service';
+import { operationRouter } from '@src/operation/routes/operation.routes';
+import { authRouter } from '@src/auth/routes/auth.routes';
+import { getDatabaseService } from '@src/database/database.service';
 
 dotenv.config();
 const app = express();

@@ -23,4 +23,4 @@ class OperationsService implements OperationInterface {
   }
 }
 
-export default (dbConnect: DatabaseInterface): OperationInterface => new OperationsService(dbConnect);
+export const getOperationsService = (dbConnect: DatabaseInterface): OperationInterface => new OperationsService(dbConnect);

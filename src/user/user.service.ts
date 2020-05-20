@@ -19,4 +19,4 @@ class UserService {
   }
 }
 
-export default (dbConnect: DatabaseInterface) => new UserService(dbConnect);
+export const getUserService = (dbConnect: DatabaseInterface) => new UserService(dbConnect);

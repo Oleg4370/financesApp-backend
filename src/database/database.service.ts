@@ -1,5 +1,5 @@
 import {find, reject} from 'lodash';
-import database from './database';
+import { database } from './database';
 
 export interface DatabaseInterface {
   findAll(selector: string): Promise<[]>;
@@ -55,4 +55,4 @@ class DatabaseService implements DatabaseInterface {
   }
 }
 
-export default () => new DatabaseService(getDB);
+export const getDatabaseService = () => new DatabaseService(getDB);

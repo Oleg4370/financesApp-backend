@@ -1,17 +1,17 @@
 import { Router } from 'express';
 import jwt from 'express-jwt';
-import getAuthService from '@src/auth/auth.service';
+import { getAuthService } from '@src/auth/auth.service';
 import { AuthRequest } from '@src/auth/auth.models';
 import { DatabaseInterface } from '@src/database/database.service';
 import { getErrorResponse, successResponse } from '@src/utils/responseBuilder';
-import validation from './auth.schemas';
+import * as validation from './auth.schemas';
 
 const authResMessages = {
   invalidUser: 'Send incorrect user object',
   logout: 'Successful logout'
 }
 
-const authRouter = (dbConnect: DatabaseInterface) => {
+export const authRouter = (dbConnect: DatabaseInterface) => {
   const router = Router();
   const AuthService = getAuthService(dbConnect);
 
@@ -56,5 +56,3 @@ const authRouter = (dbConnect: DatabaseInterface) => {
 
   return router;
 }
-
-export default authRouter;

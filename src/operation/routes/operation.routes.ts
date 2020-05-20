@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import getOperationsService from '../operation.service';
+import { getOperationsService } from '../operation.service';
 import { DatabaseInterface } from '@src/database/database.service';
 import { successResponse, createdResponse, getErrorResponse, internalErrorResponse } from '@src/utils/responseBuilder';
 import { operationSchema } from './operation.schemas';
 
-const operationRouter = (dbConnect: DatabaseInterface) => {
+export const operationRouter = (dbConnect: DatabaseInterface) => {
   const router = Router();
   const OperationsService = getOperationsService(dbConnect);
 
@@ -35,5 +35,3 @@ const operationRouter = (dbConnect: DatabaseInterface) => {
 
   return router;
 }
-
-export default operationRouter;

@@ -3,11 +3,11 @@ import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { isEmpty } from 'lodash';
 import { Token } from './auth.models';
-import getUserService from '@src/user/user.service';
+import { getUserService } from '@src/user/user.service';
 import { User } from '@src/user/user.models';
 import { DatabaseInterface } from '@src/database/database.service';
 
-interface AuthInterface {
+export interface AuthInterface {
   generateToken(user: User): Promise<Token>;
   login(user: User): Promise<Token>;
   removeRefreshToken(query: object): Promise<string>;
@@ -59,5 +59,4 @@ class AuthService implements AuthInterface {
     return this.generateToken({ login: refreshTokenData.login });
   }
 }
-
-export default (dbConnect: DatabaseInterface): AuthInterface => new AuthService(dbConnect);
+export const getAuthService = (dbConnect: DatabaseInterface): AuthInterface => new AuthService(dbConnect);
