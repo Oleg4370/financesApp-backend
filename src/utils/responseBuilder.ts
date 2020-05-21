@@ -3,8 +3,16 @@ import status from 'http-status';
 const defaultHeaders = {
   'Content-Type': 'application/json'
 }
-interface ValidationError extends Error {
+
+interface ValidationErrorInterface extends Error {
   type?: string;
+}
+
+export class ValidationError {
+  constructor(
+    private message: string,
+    private type: errorTypes
+  ) {}
 }
 
 export function successResponse(content = {}) {
@@ -39,6 +47,22 @@ export function internalErrorResponse(error: Error | string = 'Something went wr
   }
 }
 
+export function forbiddenErrorResponse(error: Error | string = 'Something went wrong') {
+  return {
+    headers: defaultHeaders,
+    status: status.FORBIDDEN,
+    body: { message: typeof error === 'object' ? error.message : error },
+  }
+}
+
+export function notFoundErrorResponse(error: Error | string = 'Something went wrong') {
+  return {
+    headers: defaultHeaders,
+    status: status.NOT_FOUND,
+    body: { message: typeof error === 'object' ? error.message : error },
+  }
+}
+
 export function invalidRequest(error: Error) {
   return {
     headers: defaultHeaders,
@@ -50,9 +74,18 @@ export function invalidRequest(error: Error) {
   }
 }
 
-export function getErrorResponse(error: ValidationError | string) {
-  if (typeof error === 'object' && error.type === 'any.required') {
-    return invalidRequest(error);
+export function getErrorResponse(error: ValidationErrorInterface | string) {
+  if (typeof error === 'object') {
+    switch (error.type) {
+      case 'any.required':
+        return invalidRequest(error);
+      case '403':
+        return forbiddenErrorResponse(error);
+      case '404':
+        return notFoundErrorResponse(error);
+      default:
+        return internalErrorResponse(error);
+    }
   }
   return internalErrorResponse(error);
 }

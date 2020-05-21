@@ -6,6 +6,7 @@ import { Token } from './auth.models';
 import { getUserService } from '@src/user/user.service';
 import { User } from '@src/user/user.models';
 import { DatabaseInterface } from '@src/database/database.service';
+import { ValidationError } from '@utils/responseBuilder';
 
 export interface AuthInterface {
   generateToken(user: User): Promise<Token>;
@@ -32,15 +33,15 @@ class AuthService implements AuthInterface {
 
     const { login, hash } = await UserService.getUser(userData.login);
     if (!login) {
-      throw new Error(`User with login ${userData.login} not exist`);
+      throw new ValidationError(`User with login ${userData.login} not exist`, '404');
     }
     const isPasswordCorrect = await bcrypt.compare(userData.password, hash);
 
-    if (isPasswordCorrect) {
-      return await this.generateToken({ login });
-    } else {
-      throw new Error(`User password are incorrect`);
+    if (!isPasswordCorrect) {
+      throw new ValidationError('Incorrect user password', '403');
     }
+
+    return await this.generateToken({ login });
   }
 
   async removeRefreshToken(query: object): Promise<string> {
