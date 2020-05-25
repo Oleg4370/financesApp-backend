@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import jwt from 'express-jwt';
+import { config } from '@src/config';
 import { getAuthService } from '@src/auth/auth.service';
 import { AuthRequest } from '@src/auth/auth.models';
 import { DatabaseInterface } from '@src/database/database.service';
@@ -41,7 +42,7 @@ export const authRouter = (dbConnect: DatabaseInterface) => {
     }
   });
 
-  router.post('/logout', jwt({ secret: process.env.TOKEN_SECRET }), async (req: AuthRequest, res) => {
+  router.post('/logout', jwt({ secret: config.token.secret }), async (req: AuthRequest, res) => {
     try {
       const { login } = await validation.jwtSchema.validateAsync(req.user);
       await AuthService.removeRefreshToken({login});

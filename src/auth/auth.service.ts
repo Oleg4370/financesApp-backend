@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { isEmpty } from 'lodash';
+import { config } from '@src/config';
 import { Token } from './auth.models';
 import { getUserService } from '@src/user/user.service';
 import { User } from '@src/user/user.models';
@@ -20,10 +21,11 @@ class AuthService implements AuthInterface {
 
   async generateToken(userData: object): Promise<Token> {
     const refreshToken = uuidv4();
+    const { secret, expiresIn } = config.token;
 
     await this.db.add('refreshTokens', { refreshToken, ...userData });
     return {
-      accessToken: jwt.sign(userData, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXP }),
+      accessToken: jwt.sign(userData, secret, { expiresIn }),
       refreshToken
     }
   }
