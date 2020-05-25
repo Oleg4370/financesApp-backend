@@ -1,36 +1,58 @@
-import fs from 'fs';
-import { Operation } from "@src/operation/operation.models";
-import { pathToDBFile } from '@src/config';
+import {find, reject} from 'lodash';
+import { database } from './database';
 
-const getData = (): Promise<Operation[]> => {
-    return new Promise((resolve, reject) => {
-        fs.readFile(pathToDBFile, (err, buff) => {
-            if (err) {
-                reject(err);
-            }
-            try {
-                // @ts-ignore
-                const jsonData = JSON.parse(buff);
-                resolve(jsonData);
-            } catch (error) {
-                reject(error);
-            }
-        });
-    })
-};
+export interface DatabaseInterface {
+  findAll(selector: string): Promise<[]>;
+  add(selector: string, data: {}): Promise<any>;
+  find(selector: string, query: object): Promise<any>;
+  remove(selector: string, query: object): Promise<any>;
+}
+const getDB = () => database;
 
-const setData = (updatedData: Operation[]): Promise<undefined | Error> => {
-    return new Promise((resolve, reject) => {
-        fs.writeFile(pathToDBFile, updatedData, (err) => {
-            if (err) {
-                reject(err);
-            }
-            resolve();
-        })
-    })
+class DatabaseService implements DatabaseInterface {
+  db: any;
+  constructor(dbConnector: any) {
+    this.db = dbConnector();
+  }
+
+  async findAll(selector: string): Promise<[]> {
+    try {
+      const neededArray = await this.db[selector];
+      return neededArray;
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  async add(selector: string, data: {}): Promise<object | Error> {
+    try {
+      await this.db[selector].push(data);
+      return data;
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  async find(selector: string, query: any): Promise<object | undefined | Error> {
+    try {
+      const neededArray = await this.findAll(selector);
+      return find(neededArray, query) || {};
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  async remove(selector: string, query: object): Promise<object> {
+    try {
+      const neededArray = await this.findAll(selector);
+      const updatedData = reject(neededArray, query);
+
+      this.db[selector] = updatedData;
+      return query;
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
 }
 
-export default {
-    getData,
-    setData
-};
+export const getDatabaseService = () => new DatabaseService(getDB);
