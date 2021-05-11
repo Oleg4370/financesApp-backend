@@ -24,7 +24,7 @@
     "helmet": "^3.22.0",
     "http-status": "^1.4.2",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "morgan": "^1.10.0",
     "pino": "^6.2.1",
     "uuid": "^8.0.0"
